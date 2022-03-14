@@ -6,10 +6,10 @@ import Nav from '../Nav/nav'
 const Home = () => {
     return (
         <>
-        <Nav/>
-        <div className='home'>
-            
-        </div>
+            <Nav/>
+            <div className='home'>
+                
+            </div>
         </>
     )
 }
