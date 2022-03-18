@@ -41,3 +41,7 @@
     color: rgb(0, 90, 0);
     cursor: pointer;
 }
+
+#username {
+    color: white;
+}

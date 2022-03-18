@@ -1,16 +1,37 @@
 import json
-from flask import redirect, request, url_for
+from flask import redirect, request, Response, session, url_for
+from flask_session import Session
 
 from app import app
 from spotify import Spotify
 
 
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 spotify = Spotify()
 
 
-@app.route('/')
-def home():
-    return ''
+@app.route('/user')
+def logged():
+    response = Response()
+    response.mimetype = 'application/json'
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    if not session.get('access_token'):
+        response.set_data(json.dumps(
+            {
+                "name": "Glauco"
+            }
+        ))
+        print('true')
+        return response
+
+    response.response = {
+        'name': 'false'
+    }
+    print('false')
+    return response
 
 
 @app.route('/login', methods=['POST'])
@@ -23,6 +44,7 @@ def token():
     response = json.loads(spotify.get_access_token())
     spotify.access_token = response.get('access_token')
     spotify.refresh_token = response.get('refresh_token')
+    session['access_token'] = response.get('access_token')
 
     return redirect('http://localhost:3000')
 
