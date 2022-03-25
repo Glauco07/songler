@@ -18,19 +18,22 @@ def logged():
     response.mimetype = 'application/json'
     response.headers.add('Access-Control-Allow-Origin', '*')
 
+    print(f'Session: {session.get("access_token")}')
+
     if not session.get('access_token'):
         response.set_data(json.dumps(
             {
-                "name": "Glauco"
+                "message": "User not logged in"
             }
         ))
-        print('true')
         return response
 
-    response.response = {
-        'name': 'false'
-    }
-    print('false')
+    response.set_data(json.dumps(
+        {
+            "name": "Glauco"
+        }
+    ))
+    print('login realizado')
     return response
 
 

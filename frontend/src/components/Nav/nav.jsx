@@ -8,7 +8,6 @@ const Nav = () => {
     fetch('http://localhost:5000/user')
       .then(response => response.json())
       .then(data => {
-        console.log(data.name)
         setUser({'name': data.name})
       })
       .catch(e => console.log(e))
@@ -22,13 +21,13 @@ const Nav = () => {
         <a href='/history'>History</a>
         <a href='/game'>Play</a>
       </div>
-          {
-            user.name !== undefined
-            ? <div id='username'>{user.name}</div>
-            : <form action='http://localhost:5000/login' method='post'>
-                <button className='home-button'>Login</button>
-              </form>
-          }
+      {
+        user.name !== undefined
+        ? <div id='username'>{user.name}</div>
+        : <form action='http://localhost:5000/login' method='post'>
+            <button className='home-button'>Login</button>
+          </form>
+      }
     </div>
   )
 }
