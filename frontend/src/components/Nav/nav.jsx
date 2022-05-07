@@ -5,6 +5,13 @@ const Nav = () => {
   const [user, setUser] = useState({})
 
   useEffect(() => {
+    fetch('http://localhost:5000/token')
+      .then(response => response.json())
+      .then(tokens => {
+        localStorage.setItem('access_token', tokens.access_token)
+        localStorage.setItem('refresh_token', tokens.refresh_token)
+      })
+
     fetch('http://localhost:5000/user')
       .then(response => response.json())
       .then(data => {

@@ -8,14 +8,15 @@ from credentials import client_id, client_secret
 class Spotify():
     def __init__(self):
         self.access_token = ''
-        self.base_url = 'https://accounts.spotify.com'
+        self.auth_url = 'https://accounts.spotify.com'
+        self.base_url = 'https://api.spotify.com'
         self.code = ''
         self.redirect_uri = 'http://localhost:5000/callback'
         self.refresh_token = ''
         self.state = secrets.token_hex(16)
 
     def get_login_page(self):
-        authorize_url = f'{self.base_url}/authorize'
+        authorize_url = f'{self.auth_url}/authorize'
 
         params = {
             'client_id': client_id,
@@ -29,7 +30,7 @@ class Spotify():
         return response.url
 
     def get_access_token(self):
-        token_url = f'{self.base_url}/api/token'
+        token_url = f'{self.auth_url}/api/token'
         b64 = base64.b64encode(f'{client_id}:{client_secret}'.encode('ascii'))
 
         data = {

@@ -1,40 +1,24 @@
 import json
-from flask import redirect, request, Response, session, url_for
-from flask_session import Session
+from flask import jsonify, redirect, request, Response, url_for
+from flask_cors import CORS
+
+import requests
 
 from app import app
 from spotify import Spotify
 
 
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
 spotify = Spotify()
+CORS(app)
 
 
 @app.route('/user')
-def logged():
-    response = Response()
-    response.mimetype = 'application/json'
-    response.headers.add('Access-Control-Allow-Origin', '*')
+def user():
+    user_name = requests.get(f'{spotify.base_url}/v1/me')
 
-    print(f'Session: {session.get("access_token")}')
-
-    if not session.get('access_token'):
-        response.set_data(json.dumps(
-            {
-                "message": "User not logged in"
-            }
-        ))
-        return response
-
-    response.set_data(json.dumps(
-        {
-            "name": "Glauco"
-        }
-    ))
-    print('login realizado')
-    return response
+    return jsonify({
+        "message": "User not logged in"
+    })
 
 
 @app.route('/login', methods=['POST'])
@@ -44,10 +28,19 @@ def login():
 
 @app.route('/token')
 def token():
+    return jsonify({
+        'access_token': spotify.access_token,
+        'refresh_token': spotify.refresh_token
+    })
+
+
+@app.route('/generate_token')
+def generate_token():
     response = json.loads(spotify.get_access_token())
     spotify.access_token = response.get('access_token')
     spotify.refresh_token = response.get('refresh_token')
-    session['access_token'] = response.get('access_token')
+
+    print(spotify.access_token)
 
     return redirect('http://localhost:3000')
 
@@ -65,7 +58,7 @@ def callback():
 
         spotify.code = code
 
-        return redirect(url_for('token'))
+        return redirect(url_for('generate_token'))
 
     else:
         return error, 403
