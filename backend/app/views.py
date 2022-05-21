@@ -1,5 +1,5 @@
 import json
-from flask import jsonify, redirect, request, Response, url_for
+from flask import jsonify, make_response, redirect, request, Response, url_for
 from flask_cors import CORS
 
 import requests
@@ -9,40 +9,56 @@ from spotify import Spotify
 
 
 spotify = Spotify()
-CORS(app)
+CORS(app, supports_credentials=True)
+
+
+@app.route('/test')
+def test():
+    return 'test'
 
 
 @app.route('/user')
 def user():
-    user_name = requests.get(f'{spotify.base_url}/v1/me')
+    api_response, access_token = spotify.make_request(
+        f'{spotify.base_url}/v1/me'
+    )
 
-    return jsonify({
-        "message": "User not logged in"
-    })
+    response = make_response(json.loads(api_response))
+    response.set_cookie('access_token', access_token)
+
+    return response
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     return redirect(spotify.get_login_page())
 
 
 @app.route('/token')
 def token():
+    access_token = request.cookies.get('access_token')
+    refresh_token = request.cookies.get('refresh_token')
+
     return jsonify({
-        'access_token': spotify.access_token,
-        'refresh_token': spotify.refresh_token
+        'access_token': access_token,
+        'refresh_token': refresh_token
     })
 
 
 @app.route('/generate_token')
 def generate_token():
-    response = json.loads(spotify.get_access_token())
-    spotify.access_token = response.get('access_token')
-    spotify.refresh_token = response.get('refresh_token')
+    response = make_response(redirect('http://localhost:3000'))
 
-    print(spotify.access_token)
+    tokens = json.loads(spotify.get_access_token())
+    access_token = tokens.get('access_token')
+    refresh_token = tokens.get('refresh_token')
 
-    return redirect('http://localhost:3000')
+    response.set_cookie('access_token', access_token)
+    response.set_cookie('refresh_token', refresh_token)
+    #response.delete_cookie('access_token')
+    #response.delete_cookie('refresh_token')
+
+    return response
 
 
 @app.route('/callback')

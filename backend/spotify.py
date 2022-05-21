@@ -1,6 +1,10 @@
 import base64
+import json
 import secrets
+
 import requests
+
+from flask import request
 
 from credentials import client_id, client_secret
 
@@ -29,7 +33,7 @@ class Spotify():
 
         return response.url
 
-    def get_access_token(self):
+    def get_access_token(self, refresh_token=None):
         token_url = f'{self.auth_url}/api/token'
         b64 = base64.b64encode(f'{client_id}:{client_secret}'.encode('ascii'))
 
@@ -37,9 +41,9 @@ class Spotify():
             'redirect_uri': self.redirect_uri
         }
 
-        if self.refresh_token != '':
+        if refresh_token is not None:
             data['grant_type'] = 'refresh_token'
-            data['refresh_token'] = self.refresh_token
+            data['refresh_token'] = refresh_token
 
         else:
             data['grant_type'] = 'authorization_code'
@@ -53,3 +57,24 @@ class Spotify():
         response = requests.post(token_url, data=data, headers=headers)
 
         return response.text
+
+    def make_request(self, url):
+        access_token = request.cookies.get('access_token')
+        print(f'access_token: {access_token}')
+
+        headers = {
+            'Authorization': f'Bearer {access_token}'
+        }
+
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 401:
+            refresh_token = request.cookies.get('refresh_token')
+            access_token = (
+                json.loads(self.get_access_token(refresh_token=refresh_token))
+            ).get('access_token')
+
+            headers['Authorization'] = f'Bearer {access_token}'
+            response = requests.get(url, headers=headers)
+
+        return response.text, access_token
