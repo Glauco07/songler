@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./nav.css";
+import { Link } from "react-router-dom";
+import "./Nav.css";
 
 const Nav = () => {
   const [user, setUser] = useState({});
@@ -14,10 +15,10 @@ const Nav = () => {
   return (
     <div className="nav-wrap">
       <div className="nav">
-        <a href="/home">Home</a>
-        <a href="/profile">Profile</a>
-        <a href="/history">History</a>
-        <a href="/game">Play</a>
+        <Link to="/">Home</Link>
+        <Link to="/profile">Profile</Link>
+        <Link to="/history">History</Link>
+        <Link to="/game">Play</Link>
       </div>
       {user.name !== undefined ? (
         <a id="username" href="/login">
