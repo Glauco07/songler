@@ -8,7 +8,7 @@ const Nav = () => {
   useEffect(() => {
     fetch("http://localhost:5000/user", { credentials: "include" })
       .then((response) => response.json())
-      .then((body) => setUser({ name: body.display_name }))
+      .then((body) => setUser({ name: body.images[0].url }))
       .catch((e) => console.log(e));
   }, []);
 

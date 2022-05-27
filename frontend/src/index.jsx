@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import Nav from "./Components/Nav/Nav";
 import Home from "./Components/Home/Home";
 import Login from "./Components/Login/Login";

@@ -14,7 +14,8 @@ CORS(app, supports_credentials=True)
 
 @app.route('/test')
 def test():
-    return 'test'
+
+    return redirect(url_for('user'))
 
 
 @app.route('/user')
@@ -22,8 +23,9 @@ def user():
     api_response, access_token = spotify.make_request(
         f'{spotify.base_url}/v1/me'
     )
-
+    print(api_response)
     response = make_response(json.loads(api_response))
+
     response.set_cookie('access_token', access_token)
 
     return response
