@@ -5,6 +5,11 @@ import Modal from "../Modal/Modal"
 
 const Nav = () => {
   const [user, setUser] = useState({});
+  const [show, setShow] = useState(true);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log("refresh prevented");
+  };
 
   useEffect(() => {
     fetch("http://localhost:5000/user", { credentials: "include" })
@@ -22,15 +27,18 @@ const Nav = () => {
         <Link to="/game">Play</Link>
       </div>
       {user.name !== undefined ? (
-        <a id="username" href="/login">
+        <p onClick={() => setShow(prev => !prev)} id="username" >
           {user.name}
-        </a>
+        </p>
       ) : (
-        <form action="http://localhost:5000/login" method="post">
+        <form onSubmit={onSubmit} action="http://localhost:5000/login" method="post">
           <button className="home-button">Login</button>
         </form>
       )}
-      <Modal/>
+      <>
+            {show && <Modal/>}
+      </>
+      
     </div>
   );
 };
