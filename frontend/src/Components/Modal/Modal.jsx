@@ -12,11 +12,11 @@ export default function Modal() {
     }, []);
     console.log(user.img);
     return (
-        <div className='Modal'>
-            <div className="modal__img">
-                <img src={user.img} alt='Profile' />
+            <div className='Modal'>
+                <div className='modal__img'>
+                    <img src={user.img} alt='Profile' />
+                </div>
+                <a href='/Logout'>Logout</a>
             </div>
-            <a href='/Logout'>Logout</a>
-        </div>
     );
 }

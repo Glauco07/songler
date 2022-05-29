@@ -14,14 +14,15 @@
     align-items: center;
 }
 
-.nav a {
+.nav a, #username {
     color: white;
     text-decoration: none;
     padding: 10px 50px;
     font-size: 25px;
+    cursor: pointer;
 }
 
-.nav a:hover {
+.nav a:hover, #username {
     color: rgb(0, 170, 0);
 }
 
@@ -34,6 +35,7 @@
     color: rgb(240, 240, 240);
     margin-right: 50px;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .home-button:hover{
@@ -44,4 +46,8 @@
 
 #username {
     color: white;
+}
+
+#username:hover{
+    color: rgb(0, 255, 0);
 }

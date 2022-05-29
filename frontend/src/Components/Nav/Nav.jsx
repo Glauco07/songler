@@ -5,11 +5,6 @@ import Modal from "../Modal/Modal"
 
 const Nav = () => {
   const [user, setUser] = useState({});
-  const [show, setShow] = useState(true);
-  const onSubmit = (e) => {
-    e.preventDefault();
-    console.log("refresh prevented");
-  };
 
   useEffect(() => {
     fetch("http://localhost:5000/user", { credentials: "include" })
@@ -17,6 +12,8 @@ const Nav = () => {
       .then((body) => setUser({ name: body.id }))
       .catch((e) => console.log(e));
   }, []);
+
+  const [show, setShow] = useState(false);
 
   return (
     <div className="nav-wrap">
@@ -27,18 +24,15 @@ const Nav = () => {
         <Link to="/game">Play</Link>
       </div>
       {user.name !== undefined ? (
-        <p onClick={() => setShow(prev => !prev)} id="username" >
+        <p id="username" onClick={() => setShow(prev => !prev)}>
           {user.name}
         </p>
       ) : (
-        <form onSubmit={onSubmit} action="http://localhost:5000/login" method="post">
+          <form action="http://localhost:5000/login" method="post">
           <button className="home-button">Login</button>
         </form>
       )}
-      <>
-            {show && <Modal/>}
-      </>
-      
+      {show && <Modal/>}
     </div>
   );
 };
