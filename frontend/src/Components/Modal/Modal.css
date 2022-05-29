@@ -1,0 +1,28 @@
+.Modal {
+    height: 140px;
+    width: 130px;
+    background-color: rgb(26, 26, 26);
+    position: fixed;
+    right: 20px;
+    top: 85px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Modal a {
+    text-decoration: none;
+    color: rgb(0, 255, 0);
+}
+
+.modal__img img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
+
+.modal__hidden {
+    display: none;
+}
