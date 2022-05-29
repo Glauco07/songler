@@ -36,6 +36,16 @@ def login():
     return redirect(spotify.get_login_page())
 
 
+
+@app.route('/logout')
+def logout():
+    response = make_response(redirect('http://localhost:3000'))
+    response.delete_cookie('access_token')
+    response.delete_cookie('refresh_token')
+
+    return response
+
+
 @app.route('/token')
 def token():
     access_token = request.cookies.get('access_token')
