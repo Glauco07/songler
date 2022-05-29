@@ -13,6 +13,8 @@ const Nav = () => {
       .catch((e) => console.log(e));
   }, []);
 
+  const [show, setShow] = useState(false);
+
   return (
     <div className="nav-wrap">
       <div className="nav">
@@ -22,15 +24,15 @@ const Nav = () => {
         <Link to="/game">Play</Link>
       </div>
       {user.name !== undefined ? (
-        <a id="username" href="/login">
+        <p id="username" onClick={() => setShow(prev => !prev)}>
           {user.name}
-        </a>
+        </p>
       ) : (
-        <form action="http://localhost:5000/login" method="post">
+          <form action="http://localhost:5000/login" method="post">
           <button className="home-button">Login</button>
         </form>
       )}
-      <Modal/>
+      {show && <Modal/>}
     </div>
   );
 };
