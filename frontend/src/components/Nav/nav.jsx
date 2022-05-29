@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Nav.css";
+import Modal from "../Modal/Modal"
 
 const Nav = () => {
   const [user, setUser] = useState({});
@@ -8,7 +9,7 @@ const Nav = () => {
   useEffect(() => {
     fetch("http://localhost:5000/user", { credentials: "include" })
       .then((response) => response.json())
-      .then((body) => setUser({ name: body.images[0].url }))
+      .then((body) => setUser({ name: body.id }))
       .catch((e) => console.log(e));
   }, []);
 
@@ -29,6 +30,7 @@ const Nav = () => {
           <button className="home-button">Login</button>
         </form>
       )}
+      <Modal/>
     </div>
   );
 };
