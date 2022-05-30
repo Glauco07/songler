@@ -60,7 +60,9 @@ class Spotify():
 
     def make_request(self, url):
         access_token = request.cookies.get('access_token')
-        print(f'access_token: {access_token}')
+        
+        if not access_token:
+            return None, None
 
         headers = {
             'Authorization': f'Bearer {access_token}'

@@ -6,7 +6,7 @@
     right: 20px;
     top: 85px;
     border-radius: 4px;
-    display: flex;
+    display: none;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
@@ -23,6 +23,6 @@
     border-radius: 50%;
 }
 
-.modal__hidden {
-    display: none;
+.modal__show {
+    display: flex;
 }
