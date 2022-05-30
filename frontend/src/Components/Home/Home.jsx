@@ -1,11 +1,10 @@
 import React from "react";
-import "./home.css";
-import Nav from "../Nav/nav";
+import "./Home.css";
 
 const Home = () => {
   return (
     <>
-      <Nav />
+
       <div className="home"></div>
     </>
   );

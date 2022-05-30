@@ -14,7 +14,7 @@ CORS(app, supports_credentials=True)
 
 @app.route('/test')
 def test():
-    return 'test'
+    return redirect(url_for('user'))
 
 
 @app.route('/user')
@@ -22,8 +22,12 @@ def user():
     api_response, access_token = spotify.make_request(
         f'{spotify.base_url}/v1/me'
     )
+    
+    if not api_response:
+        return jsonify('')
 
     response = make_response(json.loads(api_response))
+
     response.set_cookie('access_token', access_token)
 
     return response
@@ -32,6 +36,15 @@ def user():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return redirect(spotify.get_login_page())
+
+
+@app.route('/logout')
+def logout():
+    response = make_response(redirect('http://localhost:3000'))
+    response.delete_cookie('access_token')
+    response.delete_cookie('refresh_token')
+
+    return response
 
 
 @app.route('/token')
@@ -50,6 +63,7 @@ def generate_token():
     response = make_response(redirect('http://localhost:3000'))
 
     tokens = json.loads(spotify.get_access_token())
+    print(f'tokens: {tokens}')
     access_token = tokens.get('access_token')
     refresh_token = tokens.get('refresh_token')
 
