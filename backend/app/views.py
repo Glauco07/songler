@@ -69,8 +69,6 @@ def generate_token():
 
     response.set_cookie('access_token', access_token)
     response.set_cookie('refresh_token', refresh_token)
-    #response.delete_cookie('access_token')
-    #response.delete_cookie('refresh_token')
 
     return response
 
