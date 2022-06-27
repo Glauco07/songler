@@ -27,7 +27,6 @@ def user():
         return jsonify('')
 
     response = make_response(json.loads(api_response))
-
     response.set_cookie('access_token', access_token)
 
     return response
