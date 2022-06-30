@@ -1,15 +1,12 @@
 import React from "react";
 import "./Home.css";
 import Player from "../Player/Player";
-import Test from "../Test/Test"
 
 const Home = () => {
   return (
-    <>
-      {//<Player />}
-      }
-      <Test />
-    </>
+    <div className="home">
+      <Player />
+    </div>
   );
 };
 

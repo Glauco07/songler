@@ -1,27 +1,15 @@
-#dzplayer, #dz-root, iframe{
-    min-width: 180px;
-    min-height: 30px;
-    top: 80px;
-    left: 0;
-}
+.player button {
+    width: 160px;
+    height: 80px;
+    background: rgb(0, 31, 255);
+    background: linear-gradient(
+        177deg,
+        rgba(0, 31, 255, 1) 0%,
+        rgba(0, 202, 255, 1) 100%
+    );
 
-
-.start-button{
-    width: 180px;
-    height: 30px;
-    background-color: green;
-    pointer-events: none; 
+    border: none;
+    border-radius: 5px;
     color: white;
-    position: relative;
-    top:0;
-    left:0;
-    z-index: 9999;
-}
-
-.Player{
-    display: flex;
-    justify-items: center;
-    height: 100%;
-    width: 100%;
-    background-color: red;
+    font-size: 25px;
 }
