@@ -79,4 +79,4 @@ class Spotify():
             headers['Authorization'] = f'Bearer {access_token}'
             response = requests.get(url, headers=headers)
 
-        return response.text, access_token
+        return response.json(), access_token

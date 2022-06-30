@@ -1,20 +1,44 @@
 import json
-from flask import jsonify, make_response, redirect, request, Response, url_for
+
+from flask import (
+    jsonify,
+    make_response,
+    redirect,
+    request,
+    url_for
+)
 from flask_cors import CORS
 
-import requests
-
 from app import app
+from deezer import Deezer
 from spotify import Spotify
 
 
 spotify = Spotify()
+deezer = Deezer()
 CORS(app, supports_credentials=True)
 
 
 @app.route('/test')
 def test():
-    return redirect(url_for('user'))
+    return redirect(url_for('playlist'))
+
+
+@app.route('/playlist')
+def playlist():
+    playlists, access_token = spotify.make_request(
+        f'{spotify.base_url}/v1/me/playlists'
+    )
+
+    urls = [playlist['tracks']['href'] for playlist in playlists['items']]
+
+    for track_url in [urls[1]]:
+        track, access_token = spotify.make_request(track_url)
+
+    response = make_response(track)  # json.loads(playlists))
+    response.set_cookie('access_token', access_token)
+
+    return response
 
 
 @app.route('/user')
@@ -22,11 +46,11 @@ def user():
     api_response, access_token = spotify.make_request(
         f'{spotify.base_url}/v1/me'
     )
-    
+
     if not api_response:
         return jsonify('')
 
-    response = make_response(json.loads(api_response))
+    response = make_response(api_response)
     response.set_cookie('access_token', access_token)
 
     return response
