@@ -26,16 +26,21 @@ def test():
 
 @app.route('/playlist')
 def playlist():
-    playlists, access_token = spotify.make_request(
-        f'{spotify.base_url}/v1/me/playlists'
-    )
+    isrcs, access_token = spotify.get_isrcs()
+    tracks = deezer.get_track_by_isrc(isrcs)
+    playlist = []
 
-    urls = [playlist['tracks']['href'] for playlist in playlists['items']]
+    for track in tracks:
+        track_infos = {
+            'title': track['title'],
+            'audio': track['preview'],
+            'image': track['album']['cover_medium'],
+            'artist': track['artist']['name'],
+            'isrc': track['isrc']
+        }
+        playlist.append(track_infos)
 
-    for track_url in [urls[1]]:
-        track, access_token = spotify.make_request(track_url)
-
-    response = make_response(track)  # json.loads(playlists))
+    response = make_response(jsonify(playlist))
     response.set_cookie('access_token', access_token)
 
     return response
