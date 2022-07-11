@@ -1,9 +1,9 @@
 import base64
 import json
+import random
 import secrets
 
 import requests
-
 from flask import request
 
 from credentials import client_id, client_secret
@@ -60,7 +60,7 @@ class Spotify():
 
     def make_request(self, url):
         access_token = request.cookies.get('access_token')
-        
+
         if not access_token:
             return None, None
 
@@ -79,4 +79,30 @@ class Spotify():
             headers['Authorization'] = f'Bearer {access_token}'
             response = requests.get(url, headers=headers)
 
-        return response.text, access_token
+        return response.json(), access_token
+
+    def get_isrcs(self, quantity=30):
+        playlists, access_token = self.make_request(
+            f'{self.base_url}/v1/me/playlists'
+        )
+
+        playlists_urls = [
+            playlist['tracks']['href'] for playlist in playlists['items']
+        ]
+
+        playlist_isrcs = []
+
+        for track_url in playlists_urls:
+            for playlist_url in playlists_urls:
+                playlist_tracks, access_token = self.make_request(track_url)
+                items = playlist_tracks.get('items', {})
+                for item in items:
+                    try:
+                        isrc = item['track']['external_ids']['isrc']
+                        playlist_isrcs.append(isrc)
+                    except Exception:
+                        continue
+
+        sample_isrcs = random.sample(playlist_isrcs, quantity)
+
+        return sample_isrcs, access_token

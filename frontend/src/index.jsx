@@ -5,7 +5,7 @@ import Home from "./Components/Home/Home";
 import Login from "./Components/Login/Login";
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+<script src="https://e-cdns-files.dzcdn.net/js/min/dz.js"></script>
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>

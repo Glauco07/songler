@@ -44,10 +44,3 @@
     cursor: pointer;
 }
 
-#username {
-    color: white;
-}
-
-#username:hover{
-    color: rgb(0, 255, 0);
-}
