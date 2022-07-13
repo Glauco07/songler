@@ -1,7 +1,40 @@
+.player {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 .player button {
     width: 160px;
     height: 80px;
     border: none;
     border-radius: 5px;
-    font-size: 25px;
+    font-size: 18px;
+}
+
+.roundNumber {
+    font-size: 48px;
+    color: white;
+}
+
+.rightAnswer {
+    background: green;
+}
+
+.wrongAnswer {
+    background: rgb(255, 0, 0);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 650px;
+}
+
+.button-container button {
+    margin: 10px;
 }
