@@ -1,6 +1,5 @@
 import base64
 import json
-import random
 import secrets
 
 import requests
@@ -18,6 +17,7 @@ class Spotify():
         self.redirect_uri = 'http://localhost:5000/callback'
         self.refresh_token = ''
         self.state = secrets.token_hex(16)
+        self.scopes = ['user-library-read']
 
     def get_login_page(self):
         authorize_url = f'{self.auth_url}/authorize'
@@ -26,7 +26,8 @@ class Spotify():
             'client_id': client_id,
             'redirect_uri': self.redirect_uri,
             'response_type': 'code',
-            'state': self.state
+            'state': self.state,
+            'scope': self.scopes
         }
 
         response = requests.get(authorize_url, params=params)
@@ -81,28 +82,45 @@ class Spotify():
 
         return response.json(), access_token
 
-    def get_isrcs(self, quantity=30):
-        playlists, access_token = self.make_request(
+    def get_isrcs(self, items):
+        playlist_isrcs = []
+
+        for item in items:
+            try:
+                isrc = item['track']['external_ids']['isrc']
+                playlist_isrcs.append(isrc)
+            except Exception:
+                continue
+
+        return playlist_isrcs
+
+    def get_playlists(self):
+        user_playlists, access_token = self.make_request(
             f'{self.base_url}/v1/me/playlists'
         )
 
         playlists_urls = [
-            playlist['tracks']['href'] for playlist in playlists['items']
+            playlist['tracks']['href'] for playlist in user_playlists['items']
         ]
 
-        playlist_isrcs = []
+        playlists = []
 
-        for track_url in playlists_urls:
-            for playlist_url in playlists_urls:
-                playlist_tracks, access_token = self.make_request(track_url)
-                items = playlist_tracks.get('items', {})
-                for item in items:
-                    try:
-                        isrc = item['track']['external_ids']['isrc']
-                        playlist_isrcs.append(isrc)
-                    except Exception:
-                        continue
+        for playlist_url in playlists_urls:
+            playlist_tracks, access_token = self.make_request(playlist_url)
+            playlists.extend(playlist_tracks['items'])
 
-        sample_isrcs = random.sample(playlist_isrcs, quantity)
+        return playlists
 
-        return sample_isrcs, access_token
+    def get_liked_songs(self):
+        query = '?limit=50'
+        url = f'{self.base_url}/v1/me/tracks{query}'
+        liked_songs = []
+
+        while url is not None:
+            result, access_token = self.make_request(
+                url
+            )
+            liked_songs.extend(result['items'])
+            url = result['next']
+
+        return liked_songs
