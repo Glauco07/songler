@@ -27,9 +27,13 @@ const Player = () => {
     };
 
     const getResult = async (e) => {
-        if (e.target.innerText === answer.current.title)
-            e.target.classList.add("rightAnswer");
-        else e.target.classList.add("wrongAnswer");
+        if (e.target.innerText === answer.current.title) {
+            document.getElementById("rightAnswer").classList.remove("hide");
+            e.target.classList.add("rightAnswer__button");
+        } else {
+            document.getElementById("wrongAnswer").classList.remove("hide");
+            e.target.classList.add("wrongAnswer__button");
+        }
         handlePlayer(audio, false);
         await sleep(1000);
         setRoundNumber(roundNumber - 1);
@@ -41,19 +45,29 @@ const Player = () => {
 
     useEffect(() => {
         if (playlist.length < 1 || roundNumber <= 0) return;
-        console.log("1");
+        if (roundNumber === numberOfRounds) handlePlayer(audio, false);
+
+        //reset buttons
+        document.getElementById("rightAnswer").classList.add("hide");
+        document.getElementById("wrongAnswer").classList.add("hide");
         document.querySelectorAll(".guessButton").forEach((e) => {
-            e.classList.remove("wrongAnswer");
-            e.classList.remove("rightAnswer");
+            e.classList.remove("wrongAnswer__button");
+            e.classList.remove("rightAnswer__button");
         });
+
+        //mount next round
         answers.current = playlist.splice(0, roundNumber);
         answer.current = answers.current.pop();
         const round = playlist.splice(0, 5);
         round.push(answer.current);
+
+        //remove unnecessary text
+        round.forEach((e) => {
+            e.title = e.title.split("(")[0];
+        });
+
         round.sort(() => Math.random() - 0.5);
         setGuesses(round);
-        console.log("Round: " + roundNumber);
-        console.log("Current song: " + answer.current.title);
         audio = new Audio(answer.current.audio);
         handlePlayer(audio, true);
     }, [playlist, roundNumber]);
@@ -62,33 +76,45 @@ const Player = () => {
         <div className='player'>
             {guesses.length === 0 ? (
                 <div>
-                    <button onClick={getPlaylist}>Start</button>
+                    <button
+                        className='guessButton startButton'
+                        onClick={getPlaylist}>
+                        Start
+                    </button>
                 </div>
             ) : (
                 <>
-                    <p class='roundNumber'>{4 - roundNumber}</p>
+                    <p className='roundNumber'>
+                        {numberOfRounds - roundNumber + 1}
+                    </p>
                     <div className='button-container'>
-                        <button class='guessButton' onClick={getResult}>
+                        <button className='guessButton' onClick={getResult}>
                             {guesses[0].title}
                         </button>
-                        <button class='guessButton' onClick={getResult}>
+                        <button className='guessButton' onClick={getResult}>
                             {guesses[1].title}
                         </button>
-                        <button class='guessButton' onClick={getResult}>
+                        <button className='guessButton' onClick={getResult}>
                             {guesses[2].title}
                         </button>
-                        <button class='guessButton' onClick={getResult}>
+                        <button className='guessButton' onClick={getResult}>
                             {guesses[3].title}
                         </button>
-                        <button class='guessButton' onClick={getResult}>
+                        <button className='guessButton' onClick={getResult}>
                             {guesses[4].title}
                         </button>
-                        <button class='guessButton' onClick={getResult}>
+                        <button className='guessButton' onClick={getResult}>
                             {guesses[5].title}
                         </button>
                     </div>
                 </>
             )}
+            <p id='rightAnswer' className='hide'>
+                Acertou!
+            </p>
+            <p id='wrongAnswer' className='hide'>
+                Errou!
+            </p>
         </div>
     );
 };

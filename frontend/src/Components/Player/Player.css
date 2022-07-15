@@ -19,14 +19,6 @@
     color: white;
 }
 
-.rightAnswer {
-    background: green;
-}
-
-.wrongAnswer {
-    background: rgb(255, 0, 0);
-}
-
 .button-container {
     display: flex;
     justify-content: center;
@@ -37,4 +29,75 @@
 
 .button-container button {
     margin: 10px;
+}
+
+.guessButton {
+    background: radial-gradient(100% 100% at 100% 0, #39ff85 0, #019c76 100%);
+    border-radius: 6px;
+    box-shadow: rgba(35, 66, 39, 0.4) 0 2px 4px,
+        rgba(35, 66, 45, 0.3) 0 7px 13px -3px,
+        rgba(58, 111, 89, 0.5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    height: 48px;
+    text-align: center;
+    text-decoration: none;
+    transition: box-shadow 0.15s, transform 0.15s;
+    font-size: 18px;
+}
+
+.guessButton:hover {
+    box-shadow: #3ce04a 0 0 0 1.5px inset, rgba(35, 66, 43, 0.4) 0 2px 4px,
+        rgba(35, 66, 37, 0.3) 0 7px 13px -3px, #3ce0a9 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+.guessButton:active {
+    box-shadow: #3ce03c 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.startButton {
+    margin-top: 200px;
+}
+
+#rightAnswer,
+#wrongAnswer {
+    opacity: 1;
+    transition: 1s;
+    text-align: center;
+    font-size: 80px;
+    z-index: 99;
+}
+
+#rightAnswer.hide,
+#wrongAnswer.hide {
+    display: none;
+    opacity: 0;
+}
+
+#rightAnswer {
+    color: #39ff85;
+}
+
+#wrongAnswer {
+    color: red;
+}
+.rightAnswer__button {
+    background: rgb(0, 255, 85) !important;
+}
+
+.wrongAnswer__button {
+    background: rgb(255, 0, 0) !important;
+    box-shadow: rgba(66, 35, 35, 0.4) 0 2px 4px,
+        rgba(66, 35, 35, 0.3) 0 7px 13px -3px,
+        rgba(111, 58, 58, 0.5) 0 -3px 0 inset !important;
+}
+.wrongAnswer__button .guessButton:hover {
+    box-shadow: #e03c3c 0 0 0 1.5px inset, rgba(66, 35, 35, 0.4) 0 2px 4px,
+        rgba(66, 35, 35, 0.3) 0 7px 13px -3px, #e03c3c 0 -3px 0 inset !important;
+}
+
+.wrongAnswer__button .guessButton:active {
+    box-shadow: #e03c3c 0 3px 7px inset !important;
 }
