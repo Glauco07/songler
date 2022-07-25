@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Player.css";
 import mocked_tracks from "../mocked_tracks";
-let numberOfRounds = 3;
+let numberOfRounds = 10;
 let audio = new Audio();
 
 const handlePlayer = (audio, playing) => {
@@ -17,13 +17,14 @@ const Player = () => {
     const [playlist, setPlaylist] = useState([]);
 
     const getPlaylist = () => {
-        setPlaylist(mocked_tracks);
-        return;
-        // fetch("http://localhost:5000/playlist", { credentials: "include" })
-        //     .then((response) => response.json())
-        //     .then((body) => {
-        //         setPlaylist(body);
-        //     });
+        // setPlaylist(mocked_tracks);
+        // return;
+        fetch("http://localhost:5000/songs", { credentials: "include" })
+            .then((response) => response.json())
+            .then((body) => {
+                console.log(body);
+                setPlaylist(body);
+            });
     };
 
     const getResult = async (e) => {
@@ -51,6 +52,7 @@ const Player = () => {
         const round = playlist.splice(0, 5);
         round.push(answer.current);
         round.sort(() => Math.random() - 0.5);
+        console.log(round)
         setGuesses(round);
         console.log("Round: " + roundNumber);
         console.log("Current song: " + answer.current.title);

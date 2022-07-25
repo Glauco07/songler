@@ -1,4 +1,5 @@
 import json
+import random
 
 from flask import (
     jsonify,
@@ -24,26 +25,14 @@ def test():
     return redirect(url_for('playlist'))
 
 
-@app.route('/playlist')
-def playlist():
-    isrcs, access_token = spotify.get_isrcs()
-    tracks = deezer.get_track_by_isrc(isrcs)
-    playlist = []
+@app.route('/songs')
+def songs():
+    liked_songs = spotify.get_isrcs(spotify.get_liked_songs())
+    playlists = spotify.get_isrcs(spotify.get_playlists())
 
-    for track in tracks:
-        track_infos = {
-            'title': track['title'],
-            'audio': track['preview'],
-            'image': track['album']['cover_medium'],
-            'artist': track['artist']['name'],
-            'isrc': track['isrc']
-        }
-        playlist.append(track_infos)
+    songs = deezer.get_tracks_by_isrc([*liked_songs, *playlists])
 
-    response = make_response(jsonify(playlist))
-    response.set_cookie('access_token', access_token)
-
-    return response
+    return jsonify(random.sample(songs, 150))
 
 
 @app.route('/user')

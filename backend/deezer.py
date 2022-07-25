@@ -5,7 +5,7 @@ class Deezer():
     def __init__(self):
         self.base_url = 'http://api.deezer.com'
 
-    def get_track_by_isrc(self, isrcs: list[str]) -> list[dict]:
+    def get_tracks_by_isrc(self, isrcs: list[str]) -> list[dict]:
         tracks = []
 
         for isrc in isrcs:
@@ -14,6 +14,10 @@ class Deezer():
             ).json()
 
             if not track.get('error'):
-                tracks.append(track)
+                tracks.append({
+                    'audio': track['preview'],
+                    'image': track['album']['cover_medium'],
+                    'title': track['title']
+                })
 
         return tracks
