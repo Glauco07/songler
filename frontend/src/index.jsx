@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Nav from "./Components/Nav/Nav";
 import Home from "./Components/Home/Home";
 import Login from "./Components/Login/Login";
 import "./index.css";
@@ -21,7 +20,6 @@ root.render(
     persistOptions={{ persister }}
   >
     <BrowserRouter>
-      <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="Login" element={<Login />} />
