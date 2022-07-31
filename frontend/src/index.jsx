@@ -6,12 +6,20 @@ import Login from "./Components/Login/Login";
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { queryClient } from "./services/queryClient";
-import { QueryClientProvider } from "react-query";
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 <script src="https://e-cdns-files.dzcdn.net/js/min/dz.js"></script>;
+
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+})
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <QueryClientProvider client={queryClient}>
+  <PersistQueryClientProvider
+    client={queryClient}
+    persistOptions={{ persister }}
+  >
     <BrowserRouter>
       <Nav />
       <Routes>
@@ -19,5 +27,5 @@ root.render(
         <Route path="Login" element={<Login />} />
       </Routes>
     </BrowserRouter>
-  </QueryClientProvider>
+  </PersistQueryClientProvider>
 );

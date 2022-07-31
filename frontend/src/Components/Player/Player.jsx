@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Player.css";
 import axios from "axios";
-import { useQuery } from "react-query";
-import mocked_tracks from "../mocked_tracks";
+import { useQuery } from "@tanstack/react-query";
 let numberOfRounds = 10;
 let audio = new Audio();
 
@@ -33,8 +32,6 @@ const Player = () => {
   });
 
   const getPlaylist = () => {
-    // setPlaylist(mocked_tracks);
-    // return;
     fetch("http://localhost:5000/songs", { credentials: "include" })
       .then((response) => response.json())
       .then((body) => {
