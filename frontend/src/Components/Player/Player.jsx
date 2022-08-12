@@ -1,7 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import "./Player.css";
-let numberOfRounds = 10;
-let audio = new Audio();
+let audio;
 
 const handlePlayer = (audio, playing) => {
   if (playing) audio.play();
@@ -9,55 +8,58 @@ const handlePlayer = (audio, playing) => {
 };
 
 const Player = (props) => {
-  const [ playlist, setPlaylist ] = useState(props.songs)
-  let answer = useRef();
-  let answers = useRef();
-  let [roundNumber, setRoundNumber] = useState(numberOfRounds);
+  const [numberOfRounds] = useState(3);
+  const [currentRound, setCurrentRound] = useState(1);
   const [guesses, setGuesses] = useState([]);
+  const playlist = useRef(props.songs);
+  const roundAnswer = useRef();
+  const allAnswers = useRef(playlist.current.splice(0, numberOfRounds));
 
   const getResult = async (e) => {
-    if (e.target.innerText === answer.current.title)
+    document.querySelectorAll(".guessButton").forEach((e) => {
+      e.classList.add("disabled");  // disables button after one is clicked
+    });
+    if (e.target.innerText === roundAnswer.current.title)
       e.target.classList.add("rightAnswer");
     else e.target.classList.add("wrongAnswer");
     handlePlayer(audio, false);
+    if (currentRound >= numberOfRounds) return;
     await sleep(1000);
-    setRoundNumber(roundNumber - 1);
+    setCurrentRound(currentRound + 1);
+    game();
   };
 
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  useEffect(() => {
-    console.log(playlist)
-    if (playlist.length < 1 || roundNumber <= 0) return;
-    console.log("1");
+  function game() {
+    if (currentRound >= numberOfRounds) return;
     document.querySelectorAll(".guessButton").forEach((e) => {
       e.classList.remove("wrongAnswer");
       e.classList.remove("rightAnswer");
+      e.classList.remove("disabled");
     });
-    answers.current = playlist.splice(0, roundNumber);
-    answer.current = answers.current.pop();
-    const round = playlist.splice(0, 5);
-    round.push(answer.current);
+    roundAnswer.current = allAnswers.current.pop();
+    playlist.current.sort(() => Math.random() - 0.5);
+    const round = playlist.current.slice(0, 5);
+    round.push(roundAnswer.current);
     round.sort(() => Math.random() - 0.5);
-    console.log(round);
     setGuesses(round);
-    console.log("Round: " + roundNumber);
-    console.log("Current song: " + answer.current.title);
-    audio = new Audio(answer.current.audio);
+    audio = new Audio(roundAnswer.current.audio);
+    audio.volume = 0.2;
     handlePlayer(audio, true);
-  }, [playlist, roundNumber]);
+  }
 
   return (
     <div className="player">
       {guesses.length === 0 ? (
         <div>
-          <button>Start</button>
+          <button onClick={game}>Start</button>
         </div>
       ) : (
-        <>
-          <p className="roundNumber">{4 - roundNumber}</p>
+        <div>
+          <p className="roundNumber">{currentRound}</p>
           <div className="button-container">
             <button className="guessButton" onClick={getResult}>
               {guesses[0].title}
@@ -78,7 +80,7 @@ const Player = (props) => {
               {guesses[5].title}
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

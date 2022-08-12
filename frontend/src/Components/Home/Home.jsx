@@ -26,8 +26,7 @@ const Home = () => {
       ) : (
         <>
           <p>{childData}</p>
-          {console.log(data)}
-          <Player songs={data}/>
+          <Player songs={data} />
         </>
       )}
     </div>
