@@ -17,7 +17,7 @@ class Deezer():
                 tracks.append({
                     'audio': track['preview'],
                     'image': track['album']['cover_medium'],
-                    'title': track['title']
+                    'title': track['title'].split('(')[0].rstrip()
                 })
 
         return tracks

@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const Home = () => {
-  const [childData, setChildData] = useState();
+  const [username, setUsername] = useState();
   const { isLoading, error, data } = useQuery(["songs"], async () => {
     const response = await axios.get("http://localhost:5000/songs", {
       withCredentials: true,
@@ -21,11 +21,11 @@ const Home = () => {
 
   return (
     <div className="home">
-      {childData === undefined ? (
-        <Login passChildData={setChildData} />
+      {username === undefined ? (
+        <Login passUsername={setUsername} />
       ) : (
         <>
-          <p>{childData}</p>
+          <p>{username}</p>
           <Player songs={data} />
         </>
       )}

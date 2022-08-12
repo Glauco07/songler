@@ -19,11 +19,11 @@ export default function Login(props) {
       });
   };
 
-  useEffect(() => props.passChildData(user.name), [user, props]);
+  // pass the username to parent component
+  useEffect(() => props.passUsername(user.name), [user, props]);
 
   return (
     <div>
-      {" "}
       {user.name !== undefined ? (
         <p
           id="username"

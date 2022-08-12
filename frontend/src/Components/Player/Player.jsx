@@ -13,11 +13,11 @@ const Player = (props) => {
   const [guesses, setGuesses] = useState([]);
   const playlist = useRef(props.songs);
   const roundAnswer = useRef();
-  const allAnswers = useRef(playlist.current.splice(0, numberOfRounds));
+  const allAnswers = useRef();
 
   const getResult = async (e) => {
     document.querySelectorAll(".guessButton").forEach((e) => {
-      e.classList.add("disabled");  // disables button after one is clicked
+      e.classList.add("disabled"); // disables button after one is clicked
     });
     if (e.target.innerText === roundAnswer.current.title)
       e.target.classList.add("rightAnswer");
@@ -35,13 +35,15 @@ const Player = (props) => {
 
   function game() {
     if (currentRound >= numberOfRounds) return;
+    playlist.current.sort(() => Math.random() - 0.5);
+    if (currentRound === 1)
+      allAnswers.current = playlist.current.splice(0, numberOfRounds);
     document.querySelectorAll(".guessButton").forEach((e) => {
       e.classList.remove("wrongAnswer");
       e.classList.remove("rightAnswer");
       e.classList.remove("disabled");
     });
     roundAnswer.current = allAnswers.current.pop();
-    playlist.current.sort(() => Math.random() - 0.5);
     const round = playlist.current.slice(0, 5);
     round.push(roundAnswer.current);
     round.sort(() => Math.random() - 0.5);
