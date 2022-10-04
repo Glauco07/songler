@@ -1,5 +1,4 @@
 import json
-import random
 
 from flask import (
     jsonify,
@@ -32,7 +31,7 @@ def songs():
 
     songs = deezer.get_tracks_by_isrc([*liked_songs, *playlists])
 
-    return jsonify(random.sample(songs, 150))
+    return jsonify(songs)
 
 
 @app.route('/user')

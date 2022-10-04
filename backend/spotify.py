@@ -32,6 +32,8 @@ class Spotify():
 
         response = requests.get(authorize_url, params=params)
 
+        print(response.url)
+
         return response.url
 
     def get_access_token(self, refresh_token=None):

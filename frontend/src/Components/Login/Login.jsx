@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
 import "./Login.css";
 
-export default function Login() {
+export default function Login(props) {
   const [user, setUser] = useState({});
 
   const getUser = () => {
     fetch("http://localhost:5000/user", { credentials: "include" })
       .then((response) => response.json())
-      .then((body) =>
+      .then((body) => {
         setUser({
           name: body.id,
           img: body.images[0].url,
         })
-      )
+      })
       .catch((e) => {
         if (!(e instanceof TypeError)) console.log(e);
       });
   };
+
+  // pass the username to parent component
+  useEffect(() => props.passUsername(user.name), [user, props]);
+
   return (
     <div>
-      {" "}
       {user.name !== undefined ? (
         <p
           id="username"

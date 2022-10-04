@@ -38,3 +38,7 @@
 .button-container button {
     margin: 10px;
 }
+
+.disabled {
+    pointer-events: none;
+}
